@@ -53,27 +53,71 @@ Ao contrário de serviços online repletos de anúncios invasivos e riscos de se
 
 ## 🛠️ Arquitetura e Tecnologias Utilizadas
 
-O projeto adota uma divisão limpa entre **Frontend** e **Backend**, otimizando a comunicação por meio de chamadas assíncronas e conexões em tempo real.
+O projeto adota uma divisão limpa entre **Frontend** e **Backend**, estruturado em camadas para garantir escalabilidade, segurança e feedback instantâneo ao usuário.
+
+### 🏢 Topologia de Componentes
+
+Este diagrama ilustra como os diferentes módulos do ecossistema se relacionam de forma estática e organizada por camadas:
 
 ```mermaid
-graph TD
-    User(["👤 Usuário"]) -->|"Interface UI"| FE["🎨 Frontend: Vanilla HTML/CSS/JS"]
-    FE -->|"1. POST /api/start_download"| BE["⚡ FastAPI Backend"]
-    BE -->|"2. Retorna task_id"| FE
-    FE -->|"3. Conecta WebSocket"| WS["🔌 FastAPI WebSockets"]
-    BE -->|"4. Aciona"| YTDL["📦 yt-dlp Engine"]
-    YTDL -->|"5. Processa áudio/vídeo"| FFmpeg["🎞️ FFmpeg Converter"]
-    YTDL -->|"6. Envia Progresso"| WS
-    WS -->|"7. Atualiza Barra %"| FE
-    FFmpeg -->|"8. Arquivo Pronto"| BE
-    FE -->|"9. GET /api/file/[id]"| BE
-    BE -->|"10. Download via Navegador"| User
+flowchart TB
+    subgraph Client ["💻 CAMADA DO CLIENTE"]
+        User["👤 Usuário"] <-->|"Interface Visual (UI)"| FE["🎨 Frontend (Vanilla HTML/CSS/JS)"]
+    end
+
+    subgraph API ["⚡ CAMADA DE SERVIÇO (FastAPI)"]
+        BE["⚙️ Backend Core (APIs REST)"]
+        WS["🔌 FastAPI WebSockets"]
+    end
+
+    subgraph Workers ["📦 PROCESSAMENTO DE MÍDIA"]
+        YTDL["📥 yt-dlp Engine"] -->|"Processa áudio/vídeo"| FF["🎞️ FFmpeg Converter"]
+    end
+
+    %% Relações de comunicação
+    FE <-->|"HTTP REST (Solicitações & Downloads)"| BE
+    FE <-->|"WebSocket (Status em Tempo Real)"| WS
+    BE -->|"Gerencia tarefas em segundo plano"| YTDL
+    YTDL -->|"Transmite logs de progresso"| WS
+    FF -->|"Entrega arquivo finalizado"| BE
+
+    %% Estilização customizada
+    classDef client fill:#1e1e2e,stroke:#00f0ff,stroke-width:2px,color:#fff;
+    classDef api fill:#1e1e2e,stroke:#a6e3a1,stroke-width:2px,color:#fff;
+    classDef workers fill:#11111b,stroke:#f38ba8,stroke-width:1px,color:#fff;
+
+    class User,FE client;
+    class BE,WS api;
+    class YTDL,FF workers;
+```
+
+### 🔄 Fluxo de Execução Assíncrono
+
+Para entender o ciclo de vida completo de um download de forma cronológica (sem o emaranhado de linhas cruzadas do modelo tradicional):
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 👤 Usuário
+    participant FE as 🎨 Frontend (UI)
+    participant BE as ⚡ Backend (FastAPI)
+    participant WS as 🔌 WebSockets
+    participant YTDL as 📦 yt-dlp & FFmpeg
+
+    User->>FE: Insere link & clica em baixar
+    FE->>BE: POST /api/start_download
+    BE-->>FE: Retorna ID da Tarefa (task_id)
+    FE->>WS: Abre conexão WebSocket (task_id)
+    BE->>YTDL: Inicia processo assíncrono em background
     
-    style FE fill:#1e1e2e,stroke:#00f0ff,stroke-width:2px,color:#fff
-    style BE fill:#1e1e2e,stroke:#00f0ff,stroke-width:2px,color:#fff
-    style WS fill:#111,stroke:#3776AB,stroke-width:2px,color:#fff
-    style YTDL fill:#111,stroke:#FF0000,stroke-width:1px,color:#fff
-    style FFmpeg fill:#111,stroke:#007800,stroke-width:1px,color:#fff
+    loop Progresso do Download
+        YTDL->>WS: Envia percentual de progresso
+        WS-->>FE: Atualiza barra de progresso em tempo real (%)
+    end
+    
+    YTDL->>BE: Conclui fusão e disponibiliza arquivo
+    FE->>BE: GET /api/file/[id]
+    BE-->>User: Inicia download direto no navegador
 ```
 
 ### Detalhamento da Stack:
