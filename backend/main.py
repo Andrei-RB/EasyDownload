@@ -127,18 +127,19 @@ class DownloadRequest(BaseModel):
 
 async def process_download(task_id: str, url_str: str, format_type: str):
     temp_dir = tempfile.gettempdir()
+    loop = asyncio.get_running_loop()
     
     def progress_hook(d):
         if d['status'] == 'downloading':
             p = d.get('_percent_str', '0%').replace('%', '').strip()
             asyncio.run_coroutine_threadsafe(
                 manager.send_progress(task_id, {"status": "downloading", "progress": p}),
-                asyncio.get_running_loop()
+                loop
             )
         elif d['status'] == 'finished':
             asyncio.run_coroutine_threadsafe(
                 manager.send_progress(task_id, {"status": "processing", "progress": "100"}),
-                asyncio.get_running_loop()
+                loop
             )
 
     ydl_opts = {
