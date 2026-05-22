@@ -57,17 +57,17 @@ O projeto adota uma divisão limpa entre **Frontend** e **Backend**, otimizando 
 
 ```mermaid
 graph TD
-    User([👤 Usuário]) -->|Interface UI| FE[🎨 Frontend: Vanilla HTML/CSS/JS]
-    FE -->|1. POST /api/start_download| BE[⚡ FastAPI Backend]
-    BE -->|2. Retorna task_id| FE
-    FE -->|3. Conecta WebSocket| WS[🔌 FastAPI WebSockets]
-    BE -->|4. Aciona| YTDL[📦 yt-dlp Engine]
-    YTDL -->|5. Processa áudio/vídeo| FFmpeg[🎞️ FFmpeg Converter]
-    YTDL -->|6. Envia Progresso| WS
-    WS -->|7. Atualiza Barra %| FE
-    FFmpeg -->|8. Arquivo Pronto| BE
-    FE -->|9. GET /api/file/{id}| BE
-    BE -->|10. Download via Navegador| User
+    User(["👤 Usuário"]) -->|"Interface UI"| FE["🎨 Frontend: Vanilla HTML/CSS/JS"]
+    FE -->|"1. POST /api/start_download"| BE["⚡ FastAPI Backend"]
+    BE -->|"2. Retorna task_id"| FE
+    FE -->|"3. Conecta WebSocket"| WS["🔌 FastAPI WebSockets"]
+    BE -->|"4. Aciona"| YTDL["📦 yt-dlp Engine"]
+    YTDL -->|"5. Processa áudio/vídeo"| FFmpeg["🎞️ FFmpeg Converter"]
+    YTDL -->|"6. Envia Progresso"| WS
+    WS -->|"7. Atualiza Barra %"| FE
+    FFmpeg -->|"8. Arquivo Pronto"| BE
+    FE -->|"9. GET /api/file/[id]"| BE
+    BE -->|"10. Download via Navegador"| User
     
     style FE fill:#1e1e2e,stroke:#00f0ff,stroke-width:2px,color:#fff
     style BE fill:#1e1e2e,stroke:#00f0ff,stroke-width:2px,color:#fff
