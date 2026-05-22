@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  baixavideos:
+    build: .
+    container_name: baixavideos_app
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+
+  # =========================================================
+  # MODO SAAS: Se desejar habilitar o limite de downloads, 
+  # descomente o serviço Redis abaixo e as linhas no main.py
+  # =========================================================
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: baixavideos_redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+  #   command: redis-server --save 60 1 --loglevel warning

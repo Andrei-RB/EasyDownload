@@ -1,0 +1,26 @@
+version: 2
+updates:
+  # Mantém pacotes Python, como FastAPI, pydantic e yt-dlp, sempre atualizados para evitar CVEs
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    labels:
+      - "security"
+      - "dependencies"
+
+  # Mantém as imagens base do Docker (como o python:3.11-slim) sempre recentes
+  - package-ecosystem: "docker"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "security"
+      - "docker"
+
+  # Atualiza Actions do GitHub
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

@@ -1,0 +1,31 @@
+name: Pipeline de Segurança
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * 0' # Roda todo domingo automaticamente
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Instalar ferramentas de segurança
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+
+    - name: Rodar Bandit (Análise Estática de Código)
+      run: bandit -r backend/ -ll -ii
+      
+    - name: Rodar Safety (Checagem de Vulnerabilidades CVE)
+      run: safety check -r backend/requirements.txt

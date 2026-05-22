@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+yt-dlp
+redis
+fastapi-limiter==0.1.6
+pydantic
+websockets
+
+python-dotenv
+aiofiles

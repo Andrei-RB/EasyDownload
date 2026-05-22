@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Baixe vídeos e músicas na velocidade da luz com segurança militar.">
+    <title>BaixaVideos | Download Seguro</title>
+    
+    <!-- Fonte Moderna: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- [MODO SAAS] Cloudflare Turnstile (Anti-Bot) -->
+    <!-- <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script> -->
+</head>
+<body>
+
+    <main class="container">
+        <header>
+            <h1 class="glow-text">BaixaVideos</h1>
+            <p class="subtitle">Alta Velocidade. Máxima Qualidade. 100% Seguro.</p>
+        </header>
+
+        <section class="downloader-card glass-panel">
+            <div class="input-group">
+                <input type="url" id="youtube-url" placeholder="Cole o link do YouTube aqui..." required autocomplete="off">
+            </div>
+
+            <div class="format-selector">
+                <label class="radio-card">
+                    <input type="radio" name="format" value="video" checked>
+                    <span class="card-content">🎬 MP4 (Max Quality)</span>
+                </label>
+                <label class="radio-card">
+                    <input type="radio" name="format" value="audio">
+                    <span class="card-content">🎵 MP3 (Max Quality)</span>
+                </label>
+            </div>
+
+            <!-- [MODO SAAS] Widget do Turnstile (Substituir o data-sitekey pela chave real depois) -->
+            <!-- <div class="cf-turnstile-container">
+                <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA"></div>
+            </div> -->
+
+            <button id="download-btn" class="btn-primary">
+                <span class="btn-text">INICIAR DOWNLOAD</span>
+                <div class="spinner hidden"></div>
+            </button>
+
+            <!-- Barra de Progresso Real-Time -->
+            <div id="progress-container" class="hidden">
+                <div class="progress-info">
+                    <span id="status-text">Conectando...</span>
+                    <span id="percentage">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Criado por <strong>Andrei Barros</strong></p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/andreirdebarros/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <span class="separator">•</span>
+            <a href="https://github.com/Andrei-RB" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
