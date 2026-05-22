@@ -1,5 +1,5 @@
 # Usa uma imagem oficial leve do Python baseada em Debian (slim) para maior segurança e menor superfície de ataque
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # Configurações de ambiente seguro para o Python
 ENV PYTHONUNBUFFERED=1
